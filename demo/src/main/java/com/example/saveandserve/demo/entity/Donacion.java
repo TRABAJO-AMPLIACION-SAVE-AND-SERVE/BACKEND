@@ -41,7 +41,8 @@ public class Donacion {
     public static enum EstadoEnvio {
         ENTREGADO,
         ENVIADO,
-        PENDIENTE
+        PENDIENTE,
+        DENEGADO // NEW: Estado que aparece cuando el admin deniega la donación
     }
 
     @Enumerated(EnumType.STRING)

@@ -77,13 +77,12 @@ public class BancoDeAlimentosService {
         return bancoDeAlimentosRepository.findAll(pageable);
     }
 
-    // public Page<BancoDeAlimentos> obtenerBancosPaginados(Pageable pageable) {
-    //     return bancoDeAlimentosRepository.findAll(pageable);
-    // }
-    
-
     public Optional<BancoDeAlimentos> obtenerPorEmail(String email) { 
         return bancoDeAlimentosRepository.findByEmail(email);
     }
     
+    //New: Metodo para obtener los bancos de alimentos validados
+    public List<BancoDeAlimentos> obtenerBancosValidos() {
+        return bancoDeAlimentosRepository.findByDocumentacionValidada(true);
+    }
 }

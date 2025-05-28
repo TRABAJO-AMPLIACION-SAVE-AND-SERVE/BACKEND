@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.saveandserve.demo.entity.Empresa;
+import com.example.saveandserve.demo.repository.EmpresaRepository;
 import com.example.saveandserve.demo.service.EmpresaService;
 
 @RestController
@@ -28,6 +29,9 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaService empresaService;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     @GetMapping
     public ResponseEntity<List<Empresa>> obtenerEmpresas() {
@@ -47,12 +51,11 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEmpresa);
     }
 
-    
     @PutMapping("/{id}")
     public ResponseEntity<Empresa> actualizar(@PathVariable Long id, @RequestBody Empresa empresa) {
         Optional<Empresa> empresaActualizada = empresaService.actualizar(id, empresa);
         return empresaActualizada.map(ResponseEntity::ok)
-                                 .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -66,20 +69,45 @@ public class EmpresaController {
         Optional<Empresa> empresa = empresaService.obtenerPorEmail(email);
         return empresa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
 
     @GetMapping("/paginadas")
     public ResponseEntity<Page<Empresa>> obtenerEmpresasPaginadas(
-          @PageableDefault(page = 0, size = 9) Pageable pageable)
-    {
+            @PageableDefault(page = 0, size = 9) Pageable pageable) {
         Page<Empresa> empresas = empresaService.obtenerEmpresasPaginadas(pageable);
         return ResponseEntity.ok(empresas);
     }
-
 
     @GetMapping("/{id}/total-donaciones")
     public ResponseEntity<BigDecimal> getTotalDonaciones(@PathVariable Long id) {
         BigDecimal total = empresaService.getTotalDonaciones(id);
         return ResponseEntity.ok(total != null ? total : BigDecimal.ZERO);
     }
+
+    // New: Nuevo endpoint para validar
+    public static class ValidatedRequest {
+        public boolean validated;
+    }
+    
+    @PutMapping("/{id}/validate")
+    public ResponseEntity<Empresa> toggleValidation(@PathVariable Long id, @RequestBody ValidatedRequest request) {
+        try {
+            empresaRepository.updateValidationStatus(id, request.validated);
+            Optional<Empresa> empresaActualizada = empresaService.obtenerPorId(id);
+            return empresaActualizada.map(ResponseEntity::ok)
+                                   .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    //Esto es para la metrica que coja solo los entregados
+    @GetMapping("/{id}/total-donaciones-entregadas")
+public ResponseEntity<BigDecimal> getTotalDonacionesEntregadas(@PathVariable Long id) {
+    try {
+        BigDecimal total = empresaService.calcularTotalDonacionesEntregadas(id);
+        return ResponseEntity.ok(total);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 }

@@ -42,68 +42,69 @@ public class DemoApplication {
             ArticuloRepository articulosRepository) {
         return (args) -> {
             if (empresaRepository.count() == 0) {
+                //Nota: He añadido el campo documentacionValidada a la entidad Empresa y al constructor
                 List<Empresa> empresas = Arrays.asList(
                         new Empresa(null, "SaborArte Catering", "contacto@saborartecatering.com",
                                 "Explanada de España, 1, 03002", "123-456-7890", "CIF12345678",
-                                passwordEncoder.encode("1234"), "Tipo1", "Alicante", Suscripcion.ESTANDAR, null),
+                                passwordEncoder.encode("1234"), "Tipo1", "Alicante",false, Suscripcion.ESTANDAR, null),
                         new Empresa(null, "Delicia Express", "pedidos@deliciaexpress.com", "Gran Vía, 28, 28013",
-                                "123-456-7891", "CIF12345679", passwordEncoder.encode("1234"), "Tipo2", "Madrid",
+                                "123-456-7891", "CIF12345679", passwordEncoder.encode("1234"), "Tipo2", "Madrid", false,
                                 Suscripcion.BASICA, null),
                         new Empresa(null, "La Cava Bistró", "contacto@lacavabistro.com", "Passeig de Gràcia, 92, 08008",
-                                "123-456-7892", "CIF12345680", passwordEncoder.encode("1234"), "Tipo3", "Barcelona",
+                                "123-456-7892", "CIF12345680", passwordEncoder.encode("1234"), "Tipo3", "Barcelona",false,
                                 Suscripcion.PREMIUM, null),
                         new Empresa(null, "Verde Sano Foods", "info@verdesanofoods.com", "Calle de la Paz, 48, 46003",
-                                "123-456-7893", "CIF12345681", passwordEncoder.encode("1234"), "Tipo4", "Valencia",
+                                "123-456-7893", "CIF12345681", passwordEncoder.encode("1234"), "Tipo4", "Valencia",true,
                                 Suscripcion.BASICA, null),
                         new Empresa(null, "Brasa & Gril", "atencion@brasaandgrill.com",
                                 "Avenida de la Constitución, 21, 41004", "123-456-7894", "CIF12345682",
-                                passwordEncoder.encode("1234"), "Tipo5", "Sevilla", Suscripcion.BASICA, null),
+                                passwordEncoder.encode("1234"), "Tipo5", "Sevilla",true, Suscripcion.BASICA, null),
                         new Empresa(null, "Dulce Tentación Bakery", "ventas@dulcetentacionbakery.com",
                                 "Calle Larios, 10, 29005", "123-456-7895", "CIF12345683",
-                                passwordEncoder.encode("1234"), "Tipo6", "Málaga", Suscripcion.BASICA, null),
+                                passwordEncoder.encode("1234"), "Tipo6", "Málaga",false, Suscripcion.BASICA, null),
                         new Empresa(null, "Pura Vida Juice Bar", "hola@puravidajuicebar.com",
                                 "Gran Vía del Escultor Salzillo, 7, 30004", "123-456-7896", "CIF12345684",
-                                passwordEncoder.encode("1234"), "Tipo7", "Murcia", Suscripcion.PREMIUM, null),
+                                passwordEncoder.encode("1234"), "Tipo7", "Murcia",true, Suscripcion.PREMIUM, null),
                         new Empresa(null, "Gourmet Urbano", "contacto@gourmeturbano.com", "Plaza Moyúa, 4, 48009",
-                                "123-456-7897", "CIF12345685", passwordEncoder.encode("1234"), "Tipo8", "Bilbao",
+                                "123-456-7897", "CIF12345685", passwordEncoder.encode("1234"), "Tipo8", "Bilbao",false,
                                 Suscripcion.PREMIUM, null),
                         new Empresa(null, "La Mesa Italiana", "reservas@lamesaitaliana.com",
                                 "Paseo de la Independencia, 12, 50004", "123-456-7898", "CIF12345686",
-                                passwordEncoder.encode("1234"), "Tipo9", "Zaragoza", Suscripcion.PREMIUM, null),
+                                passwordEncoder.encode("1234"), "Tipo9", "Zaragoza",false, Suscripcion.PREMIUM, null),
                         new Empresa(null, "Fresh Market Deli", "pedidos@freshmarketdeli.com", "\"Calle Mayor, 5, 20003",
                                 "123-456-7899", "CIF12345687", passwordEncoder.encode("1234"), "Tipo10",
-                                "San Sebastián", Suscripcion.PREMIUM, null));
+                                "San Sebastián",true, Suscripcion.PREMIUM, null));
                 empresaRepository.saveAll(empresas);
             }
             if (bancoDeAlimentosRepository.count() == 0) {
                 List<BancoDeAlimentos> bancos = Arrays.asList(
                         new BancoDeAlimentos(null, "Banco de Alimentos de Alicante", "Calle Agost, 7", "965117190",
-                                "alicante@bancodealimentos.es", "Alicante", passwordEncoder.encode("1234"), null),
+                                "alicante@bancodealimentos.es", "Alicante", passwordEncoder.encode("1234"), false, null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Madrid", "Carretera de Colmenar Km 13,600",
-                                "917346383", "madrid@bancodealimentos.es", "Madrid", passwordEncoder.encode("1234"),
+                                "917346383", "madrid@bancodealimentos.es", "Madrid", passwordEncoder.encode("1234"),false,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Barcelona", "Carrer Motors, 122", "933464404",
-                                "barcelona@bancodealimentos.es", "Barcelona", passwordEncoder.encode("1234"), null),
+                                "barcelona@bancodealimentos.es", "Barcelona", passwordEncoder.encode("1234"), true, null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Valencia", "Carrer dels Pedrapiquers, 5",
-                                "963924460", "valencia@bancodealimentos.es", "Valencia", passwordEncoder.encode("1234"),
+                                "963924460", "valencia@bancodealimentos.es", "Valencia", passwordEncoder.encode("1234"),true,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Sevilla", "Carretera Sevilla-Málaga Km 5",
-                                "954219311", "sevilla@bancodealimentos.es", "Sevilla", passwordEncoder.encode("1234"),
+                                "954219311", "sevilla@bancodealimentos.es", "Sevilla", passwordEncoder.encode("1234"),true,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Málaga", "Avenida Juan XXIII, 49",
-                                "952131894", "malaga@bancodealimentos.es", "Málaga", passwordEncoder.encode("1234"),
+                                "952131894", "malaga@bancodealimentos.es", "Málaga", passwordEncoder.encode("1234"),true,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Bilbao", "Calle Ribera de Zorrozaurre, 48",
-                                "944499158", "bilbao@bancodealimentos.es", "Bilbao", passwordEncoder.encode("1234"),
+                                "944499158", "bilbao@bancodealimentos.es", "Bilbao", passwordEncoder.encode("1234"),false,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Zaragoza", "Calle Mercazaragoza, 1",
-                                "976737136", "zaragoza@bancodealimentos.es", "Zaragoza", passwordEncoder.encode("1234"),
+                                "976737136", "zaragoza@bancodealimentos.es", "Zaragoza", passwordEncoder.encode("1234"),true,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Murcia", "Calle Alcalde Clemente García, 14",
-                                "968879940", "murcia@bancodealimentos.es", "Murcia", passwordEncoder.encode("1234"),
+                                "968879940", "murcia@bancodealimentos.es", "Murcia", passwordEncoder.encode("1234"),false,
                                 null),
                         new BancoDeAlimentos(null, "Banco de Alimentos de Granada", "Calle Loja, Nave 7", "958303578",
-                                "granada@bancodealimentos.es", "Granada", passwordEncoder.encode("1234"), null));
+                                "granada@bancodealimentos.es", "Granada", passwordEncoder.encode("1234"), false,null));
                 bancoDeAlimentosRepository.saveAll(bancos);
             }
 
@@ -239,58 +240,6 @@ public class DemoApplication {
 
             }
 
-            // ejemplo de donacion
-            // if (donacionRepository.count() == 0) {
-            // // Buscar una empresa existente
-            // Optional<Empresa> empresaOpt = empresaRepository.findById(1L);
-            // Optional<BancoDeAlimentos> bancoOpt =
-            // bancoDeAlimentosRepository.findById(1L);
-            // Optional<Transporte> transporteOpt = transporteRepository.findById(1L);
-
-            // if (empresaOpt.isPresent() && bancoOpt.isPresent() &&
-            // transporteOpt.isPresent()) {
-            // Empresa empresa = empresaOpt.get();
-            // BancoDeAlimentos banco = bancoOpt.get();
-            // Transporte transporte = transporteOpt.get();
-
-            // // Crear dos donaciones de ejemplo
-            // Donacion donacion1 = new Donacion(
-            // null, // idDonacion (autogenerado)
-            // new BigDecimal("500.00"), // totalDonacion
-            // LocalDate.now(), // fechaEntrega
-            // EstadoEnvio.PENDIENTE, // estadoEnvio
-            // null, // donacionesRelacionadas
-            // null, // donacionPrincipal
-            // empresa, // empresa
-            // null, // lineasProducto (se pueden agregar después)
-            // banco, // bancoDeAlimentos
-            // transporte // transporte
-            // );
-
-            // Donacion donacion2 = new Donacion(
-            // null,
-            // new BigDecimal("750.00"),
-            // LocalDate.now().plusDays(3),
-            // EstadoEnvio.ENVIADO,
-            // null,
-            // null,
-            // empresa,
-            // null,
-            // banco,
-            // transporte
-            // );
-
-            // // Guardar las donaciones en la base de datos
-            // donacionRepository.save(donacion1);
-            // donacionRepository.save(donacion2);
-
-            // System.out.println("✅ Donaciones de ejemplo insertadas en la base de
-            // datos.");
-            // } else {
-            // System.out.println("⚠️ No se encontraron empresa, banco o transporte para
-            // asociar a las donaciones.");
-            // }
-            // }
 
             if (alergenosRepository.count() == 0) {
                 List<Alergenos> alergenos = Arrays.asList(

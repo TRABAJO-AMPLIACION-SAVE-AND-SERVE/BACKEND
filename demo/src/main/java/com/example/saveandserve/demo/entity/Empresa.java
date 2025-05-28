@@ -45,11 +45,15 @@ public class Empresa implements UserDetails {
     private String tipo;
     private String ciudad;
 
+    @Column(nullable = false)
+    private boolean documentacionValidada = false; // Nuevo campo añadido para validar la documentación
+
     public static enum Suscripcion {
         BASICA,
         ESTANDAR,
         PREMIUM
     }
+
 
     @Enumerated(EnumType.STRING)
     private Suscripcion suscripcion;

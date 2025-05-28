@@ -44,6 +44,9 @@ public class BancoDeAlimentos implements UserDetails {
     @Column(nullable = false)
     private String contrasenia;
 
+    @Column(nullable = false)
+    private boolean documentacionValidada = false; // Nuevo campo añadido para validar la documentación
+
     @OneToMany(mappedBy = "bancoDeAlimentos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Donacion> donaciones;

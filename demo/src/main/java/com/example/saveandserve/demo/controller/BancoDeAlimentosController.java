@@ -1,6 +1,7 @@
 package com.example.saveandserve.demo.controller;
 
 import com.example.saveandserve.demo.entity.BancoDeAlimentos;
+import com.example.saveandserve.demo.repository.BancoDeAlimentosRepository;
 import com.example.saveandserve.demo.service.BancoDeAlimentosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,6 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,12 +31,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.saveandserve.demo.entity.BancoDeAlimentos;
 import com.example.saveandserve.demo.service.BancoDeAlimentosService;
 
+
+
 @RestController
 @RequestMapping("/bancos")
 public class BancoDeAlimentosController {
 
     @Autowired
     private BancoDeAlimentosService bancoDeAlimentosService;
+    @Autowired
+private BancoDeAlimentosRepository bancoDeAlimentosRepository;
+
 
     @GetMapping
     public ResponseEntity<List<BancoDeAlimentos>> obtenerTodos() {
@@ -55,10 +60,10 @@ public class BancoDeAlimentosController {
         BancoDeAlimentos nuevoBanco = bancoDeAlimentosService.registrar(banco);
         return ResponseEntity.ok(nuevoBanco);
     }
-    
 
     @PutMapping("/{id}")
-    public ResponseEntity<BancoDeAlimentos> actualizar(@PathVariable Long id, @RequestBody BancoDeAlimentos bancoActualizado) {
+    public ResponseEntity<BancoDeAlimentos> actualizar(@PathVariable Long id,
+            @RequestBody BancoDeAlimentos bancoActualizado) {
         Optional<BancoDeAlimentos> banco = bancoDeAlimentosService.actualizar(id, bancoActualizado);
         return banco.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -74,13 +79,36 @@ public class BancoDeAlimentosController {
         Optional<BancoDeAlimentos> bancoAlimentos = bancoDeAlimentosService.obtenerPorEmail(email);
         return bancoAlimentos.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
 
     @GetMapping("/paginadas")
     public ResponseEntity<Page<BancoDeAlimentos>> obtenerBancosPaginados(
-          @PageableDefault(page = 0, size = 9) Pageable pageable) {  
-    
+            @PageableDefault(page = 0, size = 9) Pageable pageable) {
+
         Page<BancoDeAlimentos> bancos = bancoDeAlimentosService.obtenerBancosPaginados(pageable);
         return ResponseEntity.ok(bancos);
     }
+
+    public static class ValidatedRequest {
+        public boolean validated;
+    }
+    
+    @PutMapping("/{id}/validate")
+    public ResponseEntity<BancoDeAlimentos> toggleValidation(@PathVariable Long id, @RequestBody ValidatedRequest request) {
+        try {
+            bancoDeAlimentosRepository.updateValidationStatus(id, request.validated);
+            Optional<BancoDeAlimentos> bancoActualizado = bancoDeAlimentosService.obtenerPorId(id);
+            return bancoActualizado.map(ResponseEntity::ok)
+                                   .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/validados")
+public ResponseEntity<List<BancoDeAlimentos>> obtenerBancosValidados() {
+    List<BancoDeAlimentos> bancosValidados = bancoDeAlimentosService.obtenerBancosValidos();
+    return bancosValidados.isEmpty() ? 
+        ResponseEntity.noContent().build() : 
+        ResponseEntity.ok(bancosValidados);
+}
 }
